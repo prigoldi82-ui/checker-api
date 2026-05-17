@@ -12,14 +12,13 @@ def checker():
     cc = parts[0] if len(parts) > 0 else ""
 
     url = ""
-    proxy = ""
 
     if len(parts) > 1:
 
         remaining = parts[1]
 
         if "&proxy=" in remaining:
-            url, proxy = remaining.split("&proxy=", 1)
+            url = remaining.split("&proxy=")[0]
         else:
             url = remaining
 
@@ -30,13 +29,19 @@ def checker():
             "error_code": "NO_CC"
         })
 
+    if not url:
+        return jsonify({
+            "status": "Error",
+            "message": "Missing site param",
+            "error_code": "SITE DEAD"
+        })
+
     return jsonify({
-        "status": "LIVE",
+        "status": "Live",
+        "message": "Checker working",
         "cc": cc,
         "site": url,
-        "proxy": proxy,
-        "gateway": "Shopify",
-        "message": "Checker working successfully"
+        "gateway": "Shopify"
     })
 
 app.run(host="0.0.0.0", port=5000)
