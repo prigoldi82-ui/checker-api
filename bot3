@@ -1,0 +1,21 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "AUTO SHOPIFY API ONLINE"
+
+@app.route('/shopify-checker', methods=['POST'])
+def checker():
+
+    data = request.json
+
+    print("Received:", data)
+
+    return jsonify({
+        "status": "success",
+        "message": "Shopify checker working"
+    })
+
+app.run(host='0.0.0.0', port=5000)
