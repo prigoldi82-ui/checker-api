@@ -2,15 +2,26 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return "SHOPIFY CHECKER API ONLINE"
-
-@app.route('/shopify-checker', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def checker():
 
-    cc = request.args.get("cc")
-    url = request.args.get("url")
+    full_query = request.query_string.decode()
+
+    parts = full_query.split("&url=")
+
+    cc = parts[0] if len(parts) > 0 else ""
+
+    url = ""
+    proxy = ""
+
+    if len(parts) > 1:
+
+        remaining = parts[1]
+
+        if "&proxy=" in remaining:
+            url, proxy = remaining.split("&proxy=", 1)
+        else:
+            url = remaining
 
     if not cc:
         return jsonify({
@@ -19,17 +30,11 @@ def checker():
             "error_code": "NO_CC"
         })
 
-    if not url:
-        return jsonify({
-            "status": "Error",
-            "message": "Missing site param",
-            "error_code": "SITE DEAD"
-        })
-
     return jsonify({
         "status": "LIVE",
         "cc": cc,
         "site": url,
+        "proxy": proxy,
         "gateway": "Shopify",
         "message": "Checker working successfully"
     })
