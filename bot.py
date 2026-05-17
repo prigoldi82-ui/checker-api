@@ -4,18 +4,24 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "AUTO SHOPIFY API ONLINE"
+    return "SHOPIFY CHECKER API ONLINE"
 
-@app.route('/shopify-checker', methods=['POST'])
+@app.route('/shopify-checker', methods=['GET', 'POST'])
 def checker():
 
-    data = request.json
+    cc = request.args.get("cc")
 
-    print("Received:", data)
+    if not cc:
+        return jsonify({
+            "status": "error",
+            "message": "No CC provided"
+        })
 
     return jsonify({
-        "status": "success",
-        "message": "Shopify checker working"
+        "status": "LIVE",
+        "cc": cc,
+        "gateway": "Shopify",
+        "message": "Checker working successfully"
     })
 
-app.run(host='0.0.0.0', port=5000)
+app.run(host="0.0.0.0", port=5000)
