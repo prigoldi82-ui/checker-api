@@ -22,18 +22,19 @@ def checker():
         else:
             url = remaining
 
-    if not cc:
-        return jsonify({
-            "status": "Error",
-            "message": "No CC provided",
-            "error_code": "NO_CC"
-        })
-
+    # SAME AS OLD API
     if not url:
         return jsonify({
             "status": "Error",
             "message": "Missing site param",
             "error_code": "SITE DEAD"
+        })
+
+    if not cc:
+        return jsonify({
+            "status": "Error",
+            "message": "No CC provided",
+            "error_code": "NO_CC"
         })
 
     return jsonify({
